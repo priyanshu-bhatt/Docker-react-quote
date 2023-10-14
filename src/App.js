@@ -1,24 +1,49 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect } from "react";
+
+import { useState } from "react";
+import "./App.css";
 
 function App() {
+  function randomcolor() {
+    return Math.floor(Math.random() * 255);
+  }
+
+  function changeColor(color) {
+    document.body.style.background = color;
+}
+  
+function gfg_Run() {
+    changeColor("rgba("+ randomcolor() + "," + randomcolor() + "," + randomcolor() + ")");
+}   
+
+  const [quote, setQuote] = useState("");
+  let getQuote = async () => {
+    let getdata = await fetch("https://api.quotable.io/random");
+    let newdata = await getdata.json();
+    console.log(newdata.content);
+
+    setQuote(newdata);
+  };
+  useEffect(() => {
+    getQuote();
+  }, []);
+
   return (
+    <>
+    <h1 className="title">Quote Generator</h1>
+    <div className="container">
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      
+      <h2>{quote.content}</h2>
+      <h5>~{quote.author}</h5>
+      <button onClick={() => {getQuote(); gfg_Run()}} className="btn btn-danger">Generate Quote</button>
+ 
+      
+     
+      
     </div>
+    </div>
+    </>
   );
 }
 
